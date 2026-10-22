@@ -4,9 +4,15 @@ from urllib.parse import quote
 
 from gumloop._http import AsyncHttpClient
 from gumloop._http import HttpClient
+from gumloop.errors import GumloopError
 from gumloop.types import VoiceSessionCreateRequest
 from gumloop.types import VoiceSessionEndResponse
 from gumloop.types import VoiceSessionStarted
+
+
+def _require_concrete_agent_id(agent_id: str) -> None:
+    if agent_id in {"gumball", "analytics"}:
+        raise GumloopError("Voice requires a concrete agent ID; the gumball and analytics aliases are not supported.")
 
 
 class Voice:
@@ -14,6 +20,7 @@ class Voice:
         self._client = client
 
     def start(self, agent_id: str, *, session_id: str, offer_sdp: str, incognito: bool = False) -> VoiceSessionStarted:
+        _require_concrete_agent_id(agent_id)
         body = VoiceSessionCreateRequest(session_id=session_id, offer_sdp=offer_sdp, incognito=incognito)
         return VoiceSessionStarted.model_validate(
             self._client.post_to_stream_origin(
@@ -23,6 +30,7 @@ class Voice:
         )
 
     def end(self, agent_id: str, voice_session_id: str) -> VoiceSessionEndResponse:
+        _require_concrete_agent_id(agent_id)
         return VoiceSessionEndResponse.model_validate(
             self._client.post_to_stream_origin(
                 f"gummies/{quote(agent_id, safe='')}/voice/sessions/{quote(voice_session_id, safe='')}/end",
@@ -37,6 +45,7 @@ class AsyncVoice:
     async def start(
         self, agent_id: str, *, session_id: str, offer_sdp: str, incognito: bool = False
     ) -> VoiceSessionStarted:
+        _require_concrete_agent_id(agent_id)
         body = VoiceSessionCreateRequest(session_id=session_id, offer_sdp=offer_sdp, incognito=incognito)
         return VoiceSessionStarted.model_validate(
             await self._client.post_to_stream_origin(
@@ -46,6 +55,7 @@ class AsyncVoice:
         )
 
     async def end(self, agent_id: str, voice_session_id: str) -> VoiceSessionEndResponse:
+        _require_concrete_agent_id(agent_id)
         return VoiceSessionEndResponse.model_validate(
             await self._client.post_to_stream_origin(
                 f"gummies/{quote(agent_id, safe='')}/voice/sessions/{quote(voice_session_id, safe='')}/end",
