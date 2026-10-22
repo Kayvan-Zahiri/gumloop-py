@@ -48,7 +48,12 @@ DEFAULT_STREAM_TIMEOUT = 3600.0
 def _derive_stream_base_url(base_url: str) -> str:
     # Prod: api.gumloop.com -> ws.gumloop.com. Local dev: :8080 -> :9093.
     # Other backends should pass ``stream_base_url=`` explicitly.
-    return base_url.replace("api.gumloop.com", "ws.gumloop.com").replace("localhost:8080", "localhost:9093")
+    url = httpx.URL(base_url)
+    if url.host == "api.gumloop.com":
+        return str(url.copy_with(host="ws.gumloop.com"))
+    if url.host == "localhost" and url.port == 8080:
+        return str(url.copy_with(port=9093))
+    return base_url
 
 
 class Gumloop:
