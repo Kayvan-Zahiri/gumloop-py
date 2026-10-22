@@ -40,15 +40,11 @@ class BrowserProfiles:
     def create(self, name: str) -> BrowserProfile:
         _require_personal_scope(self._client)
         body = BrowserProfileCreateRequest(name=name).model_dump(exclude_none=True)
-        return BrowserProfile.model_validate(
-            self._client.post("browser-profiles", json=body)
-        )
+        return BrowserProfile.model_validate(self._client.post("browser-profiles", json=body))
 
     def get(self, profile_id: str) -> BrowserProfile:
         _require_personal_scope(self._client)
-        return BrowserProfile.model_validate(
-            self._client.get(f"browser-profiles/{quote(profile_id, safe='')}")
-        )
+        return BrowserProfile.model_validate(self._client.get(f"browser-profiles/{quote(profile_id, safe='')}"))
 
     def update(
         self,
@@ -97,15 +93,11 @@ class AsyncBrowserProfiles:
     async def create(self, name: str) -> BrowserProfile:
         _require_personal_scope(self._client)
         body = BrowserProfileCreateRequest(name=name).model_dump(exclude_none=True)
-        return BrowserProfile.model_validate(
-            await self._client.post("browser-profiles", json=body)
-        )
+        return BrowserProfile.model_validate(await self._client.post("browser-profiles", json=body))
 
     async def get(self, profile_id: str) -> BrowserProfile:
         _require_personal_scope(self._client)
-        return BrowserProfile.model_validate(
-            await self._client.get(f"browser-profiles/{quote(profile_id, safe='')}")
-        )
+        return BrowserProfile.model_validate(await self._client.get(f"browser-profiles/{quote(profile_id, safe='')}"))
 
     async def update(
         self,
@@ -117,9 +109,7 @@ class AsyncBrowserProfiles:
         _require_personal_scope(self._client)
         body = BrowserProfileUpdateRequest(name=name, is_default=is_default).model_dump(exclude_none=True)
         return BrowserProfile.model_validate(
-            await self._client.patch(
-                f"browser-profiles/{quote(profile_id, safe='')}", json=body
-            )
+            await self._client.patch(f"browser-profiles/{quote(profile_id, safe='')}", json=body)
         )
 
     async def delete(self, profile_id: str) -> BrowserProfileDeleteResponse:

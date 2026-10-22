@@ -327,9 +327,7 @@ def create_profile(
         _require_personal_profile_scope(cli)
         if not name.strip():
             raise GumloopError("Pass a non-empty profile name.")
-        response = cli.call_with_refresh(
-            lambda client: client.browser_profiles.create(name)
-        )
+        response = cli.call_with_refresh(lambda client: client.browser_profiles.create(name))
     except (GumloopError, ValidationError) as error:
         exit_with_error(error, json_output=json_output)
     if json_output:
@@ -347,9 +345,7 @@ def get_profile(
     cli: CliContext = ctx.obj
     try:
         _require_personal_profile_scope(cli)
-        response = cli.call_with_refresh(
-            lambda client: client.browser_profiles.get(profile_id)
-        )
+        response = cli.call_with_refresh(lambda client: client.browser_profiles.get(profile_id))
     except GumloopError as error:
         exit_with_error(error, json_output=json_output)
     if json_output:
@@ -397,9 +393,7 @@ def delete_profile(
     cli: CliContext = ctx.obj
     try:
         _require_personal_profile_scope(cli)
-        response = cli.call_with_refresh(
-            lambda client: client.browser_profiles.delete(profile_id)
-        )
+        response = cli.call_with_refresh(lambda client: client.browser_profiles.delete(profile_id))
     except GumloopError as error:
         exit_with_error(error, json_output=json_output)
     if json_output:

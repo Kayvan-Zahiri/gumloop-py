@@ -14,8 +14,12 @@ PROFILE = {"profile_id": "profile-1", "owner_id": "actor", "owner_scope": "perso
 OPERATIONS = [
     (["create", "Work"], "POST", "browser-profiles", {"name": "Work"}),
     (["get", "profile-1"], "GET", "browser-profiles/profile-1", None),
-    (["update", "profile-1", "--name", "Work", "--default"], "PATCH", "browser-profiles/profile-1",
-     {"name": "Work", "is_default": True}),
+    (
+        ["update", "profile-1", "--name", "Work", "--default"],
+        "PATCH",
+        "browser-profiles/profile-1",
+        {"name": "Work", "is_default": True},
+    ),
     (["delete", "profile-1"], "DELETE", "browser-profiles/profile-1", None),
 ]
 
