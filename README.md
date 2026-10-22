@@ -199,7 +199,7 @@ Every file carries its `sha256`, so `client.brain.list_files(source.id)` is enou
 
 ### Generated file lifecycle
 
-The sync/async `artifacts` resource supports `retrieve`, `content`, `rename`, `delete`, and `list_versions`, alongside existing listing, signed downloads, and sharing. Generated files are separate from session input uploads. Display-name changes preserve the stored filename. Deletion soft-deletes legacy files; VFS handles cannot be deleted through this API. Content downloads return bytes bounded to 64 MiB by default. CLI content downloads stage complete bytes before installation; replacing an existing file requires `--force` and preserves its regular permissions. New files respect the process umask. On volumes without hard links, installation uses an exclusive copy; a failed copy removes its own partial output.
+The sync/async `artifacts` resource supports `retrieve`, `content`, `rename`, `delete`, and `list_versions`, alongside existing listing, signed downloads, and sharing. Generated files are separate from session input uploads. Display-name changes preserve the stored filename and are supported only for legacy files; VFS handles return `versioned_fs_rename_unsupported`. Deletion soft-deletes legacy files; VFS handles cannot be deleted through this API. Content downloads return bytes bounded to 64 MiB by default. CLI content downloads stage complete bytes before installation; replacing an existing file requires `--force` and preserves its regular permissions. New files respect the process umask. On volumes without hard links, installation uses an exclusive copy; a failed copy removes its own partial output.
 
 ```sh
 gumloop artifacts get FILE_ID --json
